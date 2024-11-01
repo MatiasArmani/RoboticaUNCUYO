@@ -1,28 +1,63 @@
-clc; close all; clear;
+clc; clear; close all;
 
-robot;
+% Cargar el robot
+robot2;
 
-R.plot([0,pi/2,0,0,0,0],'trail',{'r','linewidth',1},'delay',0.001);
+% Definir parámetros de la cuadrícula
+x = linspace(-1.2, 1.2, 50); % Rango X en metros
+y = linspace(-1.2, 1.2, 50); % Rango Y en metros
+z = 0.15; % Altura fija para el análisis
 
-N = 100;
-q1 = jtraj([0,pi/2,0,0,0,0],[0,pi/2,R.qlim(3,2),0,0,0],N);
-q2 = jtraj([0,pi/2,R.qlim(3,2),0,0,0],[0,pi/2,R.qlim(3,2),R.qlim(4,2),0,0],N);
-q3 = jtraj([0,pi/2,R.qlim(3,2),R.qlim(4,2),0,0],[0,pi/2,R.qlim(3,1),R.qlim(4,2),0,0],N);
-q4 = jtraj([0,pi/2,R.qlim(3,1),R.qlim(4,2),0,0],[0,pi/2,R.qlim(3,2),R.qlim(4,2),0,0],N);
-q5 = jtraj([0,pi/2,R.qlim(3,2),R.qlim(4,2),0,0],[0,pi/2,R.qlim(3,2),0,0,0],N);
-q6 = jtraj([0,pi/2,R.qlim(3,2),0,0,0],[0,pi/2,R.qlim(3,1),0,0,0],N);
-q7 = jtraj([0,pi/2,R.qlim(3,1),0,0,0],[0,pi/2,R.qlim(3,1),R.qlim(4,1),0,0],N);
-q8 = jtraj([0,pi/2,R.qlim(3,1),R.qlim(4,1),0,0],[0,pi/2,R.qlim(3,2),R.qlim(4,1),0,0],N);
-q9 = jtraj([0,pi/2,R.qlim(3,2),R.qlim(4,1),0,0],[0,-pi/2,R.qlim(3,2),R.qlim(4,1),0,0],N);
-q11 = jtraj([0,-pi/2,R.qlim(3,2),0,0,0],[0,-pi/2,0,0,0,0],N);
-q22 = jtraj([0,-pi/2,R.qlim(3,2),R.qlim(4,2),0,0],[0,-pi/2,R.qlim(3,2),0,0,0],N);
-q33 = jtraj([0,-pi/2,R.qlim(3,1),R.qlim(4,2),0,0],[0,-pi/2,R.qlim(3,2),R.qlim(4,2),0,0],N);
-q44 = jtraj([0,-pi/2,R.qlim(3,2),R.qlim(4,2),0,0],[0,-pi/2,R.qlim(3,1),R.qlim(4,2),0,0],N);
-q55 = jtraj([0,-pi/2,R.qlim(3,2),0,0,0],[0,-pi/2,R.qlim(3,2),R.qlim(4,2),0,0],N);
-q66 = jtraj([0,-pi/2,R.qlim(3,1),0,0,0],[0,-pi/2,R.qlim(3,2),0,0,0],N);
-q77 = jtraj([0,-pi/2,R.qlim(3,1),R.qlim(4,1),0,0],[0,-pi/2,R.qlim(3,1),0,0,0],N);
-q88 = jtraj([0,-pi/2,R.qlim(3,2),R.qlim(4,1),0,0],[0,-pi/2,R.qlim(3,1),R.qlim(4,1),0,0],N);
+% Crear matrices para almacenar resultados
+[X, Y] = meshgrid(x, y);
+soluciones_validas = zeros(size(X));
 
+% Analizar cada punto
+for i = 1:length(x)
+    for j = 1:length(y)
+        % Crear matriz de transformación para el punto actual
+        T = transl(X(i,j), Y(i,j), z) * rpy2tr(0, 0, 0);
+        
+        % Obtener todas las soluciones
+        try
+            q_todas = cinInversa(R,T,0,dh,[0.1,0.1,0.1,0.1,0.1,0.1]);
+            validas = 0;
+            
+            % Verificar cada solución
+            for k = 1:8
+                q = q_todas(k,:);
+                if all(~isnan(q))
+                    dentro_limites = true;
+                    for m = 4
+                        if q(m) < R.qlim(m,1) || q(m) > R.qlim(m,2)
+                            dentro_limites = false;
+                            break;
+                        end
+                    end
+                    if dentro_limites
+                        validas = validas + 1;
+                    end
+                end
+            end
+            soluciones_validas(i,j) = validas;
+        catch
+            continue;
+        end
+    end
+end
 
-qTot = [q1;q2;q3;q4;q5;q6;q7;q8;q9;q88;q77;q66;q55;q44;q33;q22;q11];
-R.animate(qTot);
+% Visualizar resultados
+figure;
+surf(X, Y, soluciones_validas/8, 'EdgeColor', 'none'); % Dividir por 8 para normalizar
+colormap(jet(8));
+colorbar('Ticks', (0:7)/8, 'TickLabels', 0:7); % Ajustar colorbar para mostrar valores reales
+title('Espacio de Trabajo - Número de Soluciones Válidas');
+xlabel('X (m)');
+ylabel('Y (m)');
+zlabel('Proporción de soluciones válidas');
+axis equal;
+grid on;
+
+% Dibujar el robot en posición home
+hold on;
+R.plot([0 0 0 0 0 0], 'nobase', 'noshadow');

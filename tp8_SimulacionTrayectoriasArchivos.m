@@ -169,7 +169,7 @@ else
 end
 
 % Simulación de la trayectoria interpolada en el robot
-R.plot(q_trayectoria, 'fps', 50, 'trail', {'r', 'LineWidth', 2});% Posición inicial
+R.plot(q_trayectoria, 'fps', 180, 'trail', {'r', 'LineWidth', 2});% Posición inicial
 hold on;
 
 % Ajustes finales del gráfico

@@ -21,11 +21,11 @@ R = SerialLink(dh,'name','Robot Heladero','plotopt',{'scale',0.8,'jointdiam',1.4
 
 % Límites articulares basados en las restricciones físicas del robot
 R.qlim(1,1:2) = [-180, 180]*pi/180;
-R.qlim(2,1:2) = [ -180,  180]*pi/180;
+R.qlim(2,1:2) = [ -150,  150]*pi/180;
 R.qlim(3,1:2) = [ -180, 180]*pi/180;
-R.qlim(4,1:2) = [-180, 180]*pi/180;
+R.qlim(4,1:2) = [-60, 240]*pi/180;
 R.qlim(5,1:2) = [ -180,  180]*pi/180;
-R.qlim(6,1:2) = [-180, 180]*pi/180;
+R.qlim(6,1:2) = [-60, 240]*pi/180;
 
 % Configuración de la base del robot en el entorno de trabajo
 R.base = transl(0, 0, hBase);  % Posición de la base
