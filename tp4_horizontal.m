@@ -28,7 +28,7 @@ for i = 1:length(x)
                 q = q_todas(k,:);
                 if all(~isnan(q))
                     dentro_limites = true;
-                    for m = 4
+                    for m = 1:6
                         if q(m) < R.qlim(m,1) || q(m) > R.qlim(m,2)
                             dentro_limites = false;
                             break;

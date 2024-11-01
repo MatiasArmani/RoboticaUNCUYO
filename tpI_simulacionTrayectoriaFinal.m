@@ -21,7 +21,7 @@ params(5).t_desac = 0.2;
 params(5).t_paso = 0.8;
 
 % Mostrar menú para seleccionar archivo
-[filename, pathname] = uigetfile('*.txt', 'Seleccionar archivo de trayectoria');
+[filename, pathname] = uigetfile('../anexos/*.txt', 'Seleccionar archivo de trayectoria');
 if filename == 0
     return;
 end
@@ -211,7 +211,7 @@ while i < length(matrices)
                     params.t_desac);
 
                 % Skip the points we just processed
-                i = j - 1
+                i = j - 1;
                 falta_aproximar = false;
             end
             q_interpolado = cat(1, q_interpolado, q_tramo);
