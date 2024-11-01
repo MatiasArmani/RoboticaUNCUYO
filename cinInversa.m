@@ -82,14 +82,6 @@ end
 % grid on;
 % hold on;
 
-    %% Calculo del segundo punto del codo
-    % if indice_elegido > (n)/2
-    %     indice_elegido2 = indice_elegido - (n)/2;
-    % else
-    %     indice_elegido2 = indice_elegido + (n)/2;
-    % end
-    % indice_elegido2 = indice_elegido + 2561;
-    % p_codo2 = [x2(indice_elegido2);y2(indice_elegido2);z2(indice_elegido2);1];
 %% Calculo de q1 a partir de ese punto, existen dos opciones
 q1(1) = atan2(p_codo1(2),p_codo1(1));
 q1(2) = q1(1);
@@ -267,31 +259,8 @@ for i=1:8
     end
     invHomog(T5respecto0{i})*T;
     versorx_respectoS5=invHomog(T5respecto0{i})*T(:,1);
-    if dot(cross(T5respecto0{i}(1:3,1),T(1:3,1)),T5respecto0{i}(1:3,3)) > 0
-        q6(i) = atan2(versorx_respectoS5(2),versorx_respectoS5(1));
-    else
-        q6(i) = pi - atan2(versorx_respectoS5(2),versorx_respectoS5(1));
-    end
-    if q6(i) > pi
-        q6(i) = - 2*pi + q6(i);
-    end
-    if q6(i) < - pi
-        q6(i) =   2*pi - q6(i);
-    end
+    q6(i) = atan2(versorx_respectoS5(2),versorx_respectoS5(1));
 end
-
-% for i=1:8
-%     if q1(i) > 0
-%         q1(8+i) = q1(i) - 2*pi;
-%     else
-%         q1(8+i) = q1(i) + 2*pi;
-%     end
-% end
-% q2(9:16) = q2(1:8);
-% q3(9:16) = q3(1:8);
-% q4(9:16) = q4(1:8);
-% q5(9:16) = q5(1:8);
-% q6(9:16) = q6(1:8);
 
 q = [q1',q2',q3',q4',q5',q6'];
 
@@ -302,14 +271,13 @@ if q_mejor
     normas = zeros(2,8);
     for j=1:8
         % Normalizar los ángulos para que estén en el rango de -pi a pi
-        q_normalizado = wrapToPi(q(j,:) - q0);
+        q_normalizado = (q(j,1:5) - q0(1:5));
         normas(1,j) = norm(q_normalizado);
         normas(2,j) = j;
     end
     [~, mejor_indice] = min(normas(1,:));
     q = q(mejor_indice,:);
 end
-
 
 % q = q*180/pi;
 R.offset = offsets;

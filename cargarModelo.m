@@ -1,5 +1,5 @@
 % Cargar el modelo de la vitrina desde el archivo STL
-modelo = stlread('VitrinaRobotica.stl');
+modelo = stlread('anexos/VitrinaRobotica.stl');
 
 % Parámetros de transformación para el modelo STL
 traslacion = [1.5, 1.5, -1.6];  % Traslación en [x, y, z]

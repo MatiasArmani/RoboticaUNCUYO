@@ -17,6 +17,7 @@ R.teach();
 % Guardar el objeto `R` en la estructura de datos de la interfaz
 data.R = R; % Guardar el objeto R en 'data'
 data.matrices = {}; % Inicializar lista de matrices capturadas
+data.vectores_q = {}; % Inicializar lista de vectores q
 guidata(fig, data); % Guardar la estructura 'data' en la GUI
 
 % Crear un botón para capturar puntos
@@ -55,49 +56,32 @@ while ishandle(fig)
 end
 
 % Definir la función de callback
-function capturarPunto(~, ~)
-    % Recuperar los datos de la GUI
-    data = guidata(gcf);
-    R = data.R; % Extraer el objeto R guardado
+function capturarPunto(src, event)
+    % Obtener los datos de la GUI
+    fig = ancestor(src, 'figure');
+    data = guidata(fig);
+    R = data.R;
     
-    % Obtener la posición actual del efector final
-    T_efector = R.fkine(R.getpos());
+    % Obtener la configuración actual del robot
+    q = R.getpos();
+    T = R.fkine(q);
     
-    % Convertir el objeto SE3 a una matriz 4x4
-    T_efector = T_efector.T;
+    % Agregar la matriz T y el vector q a la lista
+    data.matrices{end+1} = T.T;
+    data.vectores_q{end+1} = [q 1];
     
-    % Verificar que la matriz tenga dimensiones correctas y mostrarla
-    disp('Matriz T_efector capturada:');
-    disp(T_efector);
+    % Actualizar los datos en la GUI
+    guidata(fig, data);
     
-    % Almacenar la matriz de transformación completa
-    data.matrices{end+1} = T_efector; % Agregar la matriz a la lista
-    guidata(gcf, data); % Actualizar los datos de la GUI
-    
-    % Guardar la lista de matrices en un archivo al final de la ejecución
-    saveMatricesToFile(data.matrices);
-end
-
-% Función para guardar las matrices en un archivo de texto
-function saveMatricesToFile(matrices)
-    fileID = fopen('matrices_transformacion3.txt', 'w');
-    
-    if fileID == -1
-        error('No se pudo abrir el archivo para escribir.');
-    end
-    
-    % Recorrer cada matriz y escribirla en el archivo
-    for i = 1:length(matrices)
-        T_efector = matrices{i}; % Extraer la matriz 4x4
-        
-        % Escribir cada elemento de la matriz en el archivo
-        fprintf(fileID, '%.4f %.4f %.4f %.4f\n', T_efector(1, :));
-        fprintf(fileID, '%.4f %.4f %.4f %.4f\n', T_efector(2, :));
-        fprintf(fileID, '%.4f %.4f %.4f %.4f\n', T_efector(3, :));
-        fprintf(fileID, '%.4f %.4f %.4f %.4f\n', T_efector(4, :));
-        %fprintf(fileID, '\n'); % Línea en blanco entre matrices
-    end
-    
+    % Guardar en archivo
+    fileID = fopen('matrices_transformacion7.txt', 'a');
+    % Primero escribir el vector q
+    fprintf(fileID, '# Vector q:\n');
+    fprintf(fileID, '%f %f %f %f %f %f\n', q);
+    % Luego escribir la matriz T
+    fprintf(fileID, '# Matriz T:\n');
+    fprintf(fileID, '%f %f %f %f\n', T.T');
     fclose(fileID);
-    disp('Las matrices han sido guardadas en matrices_transformacion.txt');
+    
+    disp('Punto capturado');
 end
