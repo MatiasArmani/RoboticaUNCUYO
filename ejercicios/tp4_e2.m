@@ -88,7 +88,3 @@ function imprimirMatrices(listMatrix,R,q)
     disp(R.fkine(q));
 
 end
-
-
-
-
