@@ -1,6 +1,6 @@
 clc; clear; close all;
 
-robot;
+robot2;
 
 % Vector de posiciones articulares que se desea analizar
 q = [pi/4, pi/6, -pi/4, pi/3, pi/6, 0.05];
