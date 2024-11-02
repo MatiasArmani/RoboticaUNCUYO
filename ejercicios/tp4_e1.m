@@ -18,8 +18,6 @@ q2 = [pi/4,-pi/2,0,0,0,0];
 q3 = [pi/5,-2*pi/5,-pi/10,pi/2,3*pi/10,-pi/2];
 q4 = [-0.61, -0.15, -0.30, 1.40, 1.90, -1.40];
 
-
-
 listMatrix1 = matricesCinematicaDirecta(q1, dh);
 listMatrix2 = matricesCinematicaDirecta(q2, dh);
 listMatrix3 = matricesCinematicaDirecta(q3, dh);
@@ -56,7 +54,6 @@ R4.plot(q4, 'scale', 0.8, 'trail', {'r', 'LineWidth', 2});
 title('Posición q4');
 
 
-
 function listMatrix = matricesCinematicaDirecta(q, dh)
     n = length(q)+1;
     prod = eye(4);
@@ -77,7 +74,3 @@ function imprimirMatrices(listMatrix)
     fprintf('%.0fM%.0f es la posición y orientación del sistema %d respecto del %d:\n', 0,  n-1, n-1, 0);
     disp(listMatrix(:,:,n));
 end
-
-
-
-
