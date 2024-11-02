@@ -194,9 +194,9 @@ while i < length(matrices)
         else
             % Collect consecutive points to approximate
             puntos_aproximar = q_inicial; % Primera columna
-            j = i+1;
+            j = i + 1;
             while j <= length(aproximar) && aproximar(j) == 1
-                puntos_aproximar = [puntos_aproximar; vectores_q{j}]; % Añadir columna
+                puntos_aproximar = [puntos_aproximar; vectores_q{j+1}]; % Añadir columna
                 j = j + 1;
                 falta_aproximar = true;
             end
@@ -204,17 +204,18 @@ while i < length(matrices)
                 % Generate trajectory through all points
                 q_tramo = mstraj(puntos_aproximar(2:end,:), ...  % Waypoints (sin incluir el primero)
                     [], ...                                                % Velocidades máximas
-                    params.t_paso*diag(eye(j-i-1)), ...                                           % tiempos entre puntos
+                    params.t_paso*diag(eye(j-i)), ...                                           % tiempos entre puntos
                     puntos_aproximar(1,:), ...                            % Punto inicial (q1)
                     params.dt, ...                                               % Intervalo de tiempo
                     params.t_desac);
 
                 % Skip the points we just processed
-                i = j-1;
+                i = j - 1;
                 falta_aproximar = false;
             end
         end
         q_interpolado = cat(1, q_interpolado, q_tramo);
+        i = i+1;
     else
         T_inicial = matrices{i};
         T_final = matrices{i + 1};
@@ -226,9 +227,12 @@ while i < length(matrices)
             q0 = q_interpolado(length(q_interpolado(:,1)), :);
             q_interpolado = cat(1, q_interpolado, cinInversa(R, T_interpolada(:, :, k), 1, dh, q0));
         end
-
     end
-    i = i+1
+    i = i + 1;
 end
 
 end
+
+function 
+
+
