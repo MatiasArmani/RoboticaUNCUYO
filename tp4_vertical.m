@@ -64,7 +64,3 @@ ylabel('Z (m)');
 zlabel('Proporción de soluciones válidas');
 axis equal;
 grid on;
-
-% Dibujar el robot en posición home
-hold on;
-R.plot([0 0 0 0 0 0], 'nobase', 'noshadow');
