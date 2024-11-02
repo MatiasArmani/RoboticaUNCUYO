@@ -6,7 +6,7 @@ robot2;
 % Definir parámetros de la cuadrícula
 z = linspace(-1.2, 1.2, 200); % Rango Z en metros
 x = linspace(-1.2, 1.2, 200); % Rango X en metros
-y_fijo = 0; % Valor fijo de Y
+y_fijo = 0.15; % Valor fijo de Y
 
 % Crear matrices para almacenar resultados
 [X, Z] = meshgrid(x, z);
