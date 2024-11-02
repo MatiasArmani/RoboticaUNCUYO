@@ -6,7 +6,7 @@ q1 = zeros(1,4); q2 = zeros(1,4); q3=zeros(1,4); q4 = zeros(1,4);
 T = invHomog(R.base.T) * T * invHomog(R.tool.T);
 Tdato = T;
 p_munecarespecto0 = T(1:3,4) - dh(6,2) * T(1:3,3);
-p = p_munecarespecto0 - [0;0;dh(1,2)];
+p = p_munecarespecto0 - [0;0;dh(1,2)];  % Punto muñeca respecto punto del hombro
 
 %% Calculo de punto sobre la circunferencia en la que puede quedar el codo utilizando parametro alfa
 
