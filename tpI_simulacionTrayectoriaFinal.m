@@ -20,14 +20,9 @@ params(5).dt = 0.01;
 params(5).t_desac = 0.2;
 params(5).t_paso = 0.8;
 
-% Mostrar menú para seleccionar archivo
-[filename, pathname] = uigetfile('../anexos/*.txt', 'Seleccionar archivo de trayectoria');
-if filename == 0
-    return;
-end
 
 % Leer archivo
-fileID = fopen(fullfile(pathname, filename), 'r');
+fileID = fopen('./anexos/trayectoria_final_completa.txt', 'r');
 if fileID == -1
     error('No se pudo abrir el archivo');
 end
@@ -228,7 +223,7 @@ while i < length(matrices)
         end
 
     end
-    i = i+1
+    i = i+1;
 end
 
 end
