@@ -5,9 +5,7 @@ robot2;
 q = [33.0, 45.6, -17.7, -69.7, 48.6, 19.0]*pi/180;
 
 % Vector de booleanos de sistemas de referencia a visualizar
-sistemas = zeros(1,6);  % (base + 6 articulaciones)
-indice = 2;
-sistemas(indice) = 1;
+sistemas = [1,1,1,1,1,1];
 % Ploteo del robot en la posición definida en b
 workspace = [-1 1 -1 1 -1 1];  % Definir el espacio de trabajo
 
@@ -15,8 +13,11 @@ fig = figure;
 R.plot(q);
 R.teach(q);
 
+
 % Graficar sistemas de referencia
 hold on;
+
+
 T = R.base.T;
 % Graficar los sistemas de referencia iniciales
 handles = cell(1, length(sistemas)-1);
