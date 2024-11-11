@@ -74,7 +74,7 @@ function capturarPunto(src, event)
     guidata(fig, data);
     
     % Guardar en archivo
-    fileID = fopen('matrices_transformacion7.txt', 'a');
+    fileID = fopen('anexos/matrices_transformacion_matiasTest.txt', 'a');
     % Primero escribir el vector q
     fprintf(fileID, '# Vector q:\n');
     fprintf(fileID, '%f %f %f %f %f %f\n', q);
